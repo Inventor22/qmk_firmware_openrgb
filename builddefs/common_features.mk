@@ -481,6 +481,15 @@ endif
         QUANTUM_LIB_SRC += i2c_master.c
     endif
 
+    ifeq ($(strip $(OPENRGB_ENABLE)), yes)
+        ifeq ($(strip $(VIA_ENABLE)), yes)
+            $(error OPENRGB_ENABLE and VIA_ENABLE cannot currently be enabled simultaneously)
+        endif
+        RAW_ENABLE := yes
+        SRC += $(QUANTUM_DIR)/openrgb.c
+        OPT_DEFS += -DOPENRGB_ENABLE
+    endif
+
 	ifeq ($(strip $(RGB_MATRIX_DRIVER)), IS31FL3743A)
         OPT_DEFS += -DIS31FLCOMMON -DIS31FL3743A -DSTM32_I2C -DHAL_USE_I2C=TRUE
         COMMON_VPATH += $(DRIVER_PATH)/led/issi
